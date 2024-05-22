@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
-from services.authentication_service import register_user, login_user
+from app.services.authentication_service import register_user, login_user
+from app.middleware.jwt_middleware import token_required
 
 app = Flask(__name__)
 
@@ -21,7 +22,12 @@ def login():
     else:
         return jsonify({'message': token}), 401
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route('/protected', methods=['GET'])
+@token_required
+def protected():
+    return jsonify({'message': 'This is a protected route.', 'user_id': request.user_id}), 200    
+
+# if __name__ == '__main__':
+#     app.run(debug=True)
 
     

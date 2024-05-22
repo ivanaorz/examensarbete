@@ -1,5 +1,5 @@
-from models.user import User
-from utils.jwt_util import generate_token
+from app.models.users import User
+from app.utils.jwt_util import generate_token
 
 def register_user(username, email, password):
     existing_user = User.find_by_email(email)

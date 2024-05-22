@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_pymongo import PyMongo
 from config.default import SECRET_KEY  # Importing the SECRET_KEY from configuration
+from app.controllers import authentication_controller
+
 
 app = Flask(__name__)
 app.config.from_object('config.default')
