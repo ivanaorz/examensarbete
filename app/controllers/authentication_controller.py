@@ -35,3 +35,7 @@ def login():
 @token_required
 def protected():
     return jsonify({'message': 'This is a protected route.', 'user_id': request.user_id}), 200
+
+
+
+

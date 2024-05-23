@@ -1,5 +1,9 @@
 from app.models.users import User
 from app.utils.jwt_util import generate_token
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 def register_user(username, email, password):
     try:
@@ -13,13 +17,22 @@ def register_user(username, email, password):
             print("Error in register_user:", str(e))
             return 'Internal Server Error', False
 
+    
 def login_user(email, password):
     try:
         user_data = User.find_by_email(email)
-        if user_data and User(**user_data).check_password(password):
-            token = generate_token(user_data['_id'])
-            return token, True
+        if user_data:
+            user = User(
+                username=user_data.get('username'),
+                email=user_data.get('email'),
+                password_hash=user_data.get('password_hash'),  
+                role=user_data.get('role'),
+                _id=user_data.get('_id')
+            )
+            if user.check_password(password):
+                token = generate_token(str(user._id))
+                return token, True
         return 'Invalid credentials', False
     except Exception as e:
-        print("Error in login_user:", str(e))
-        return 'Internal Server Error', False
+        logger.error(f"Error in login_user: {e}")
+        return 'Internal Server Error', False    
