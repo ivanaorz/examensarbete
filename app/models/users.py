@@ -1,11 +1,15 @@
 
 from bson.objectid import ObjectId
 from pymongo import MongoClient
+from pymongo.errors import DuplicateKeyError
 from werkzeug.security import generate_password_hash, check_password_hash
 
 client = MongoClient('mongodb://localhost:27017/')
 db = client['my_mongodb_database']
 users_collection = db['users']
+
+# Creating a unique index on the 'email' field
+users_collection.create_index('email', unique=True)
 
 class User:
     def __init__(self, username, email, password=None, password_hash=None, role='writer', _id=None, author_name=None):
@@ -38,7 +42,10 @@ class User:
 
     @staticmethod
     def insert_user(user_data):
-        return users_collection.insert_one(user_data)
+        try:
+            return users_collection.insert_one(user_data)
+        except DuplicateKeyError:
+            raise ValueError("A user with this email already exists.")
 
 
 

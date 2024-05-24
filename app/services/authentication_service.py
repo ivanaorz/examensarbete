@@ -9,9 +9,8 @@ def register_user(username, email, password, author_name):
     try:
         existing_user = User.find_by_email(email)
         if existing_user:
-            return 'User already exists', False
+            return 'User with this email already exists', False
         new_user = User(username=username, email=email, password=password, author_name=author_name)
-        # new_user = User(username, email, password, author_name)
         User.insert_user(new_user.__dict__)
         return 'User registered successfully', True
     except Exception as e:
