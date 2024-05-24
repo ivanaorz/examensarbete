@@ -4,7 +4,7 @@ from app.middleware.jwt_middleware import token_required
 
 book_blueprint = Blueprint('books', __name__)
    
-@book_blueprint.route('/create', methods=['POST'])
+@book_blueprint.route('/create', methods=['POST']) #CREATE
 @token_required
 def create_book():
     try:
