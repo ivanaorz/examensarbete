@@ -4,7 +4,7 @@ from app.middleware.jwt_middleware import token_required
 
 book_blueprint = Blueprint('books', __name__)
    
-@book_blueprint.route('/create', methods=['POST'])
+@book_blueprint.route('/create', methods=['POST']) #CREATE
 @token_required
 def create_book():
     try:
@@ -14,7 +14,7 @@ def create_book():
         
         # Ensuring the author_name from token matches the one in request
         if data['author_name'] != request.user_author_name:
-            return jsonify({'message': 'Author name does not match'}), 403
+            return jsonify({'message': 'Author name from token does not match the one in request'}), 403
 
         title = data['title']
         author_name = data['author_name']
