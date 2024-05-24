@@ -5,17 +5,19 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-def register_user(username, email, password):
+def register_user(username, email, password, author_name):
     try:
         existing_user = User.find_by_email(email)
         if existing_user:
             return 'User already exists', False
-        new_user = User(username, email, password)
+        new_user = User(username=username, email=email, password=password, author_name=author_name)
+        # new_user = User(username, email, password, author_name)
         User.insert_user(new_user.__dict__)
         return 'User registered successfully', True
     except Exception as e:
             print("Error in register_user:", str(e))
             return 'Internal Server Error', False
+
 
     
 def login_user(email, password):

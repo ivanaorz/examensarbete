@@ -9,7 +9,7 @@ def register():
     try:
         data = request.json
         print("Received data:", data)
-        message, success = register_user(data['username'], data['email'], data['password'])
+        message, success = register_user(data['username'], data['email'], data['password'], data.get('author_name', None))
         if success:
             return jsonify({'message': message}), 201
         else:
@@ -17,6 +17,9 @@ def register():
     except Exception as e:
         print("Error in register:", str(e))
         return jsonify({'message': 'Internal Server Error'}), 500
+
+
+
 
 @auth_blueprint.route('/login', methods=['POST'])
 def login():
