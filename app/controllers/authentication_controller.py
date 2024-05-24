@@ -19,8 +19,6 @@ def register():
         return jsonify({'message': 'Internal Server Error'}), 500
 
 
-
-
 @auth_blueprint.route('/login', methods=['POST'])
 def login():
     try:
