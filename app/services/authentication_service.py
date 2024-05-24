@@ -11,14 +11,12 @@ def register_user(username, email, password, author_name):
         if existing_user:
             return 'User with this email already exists', False
         new_user = User(username=username, email=email, password=password, author_name=author_name)
-        User.insert_user(new_user.__dict__)
+        User.insert_user(new_user.to_dict())
         return 'User registered successfully', True
     except Exception as e:
-            print("Error in register_user:", str(e))
-            return 'Internal Server Error', False
+        logger.error(f"Error in register_user: {e}")
+        return 'Internal Server Error', False
 
-
-    
 def login_user(email, password):
     try:
         user_data = User.find_by_email(email)
@@ -28,10 +26,11 @@ def login_user(email, password):
                 email=user_data.get('email'),
                 password_hash=user_data.get('password_hash'),  
                 role=user_data.get('role'),
-                _id=user_data.get('_id')
+                _id=user_data.get('_id'),
+                author_name=user_data.get('author_name')
             )
             if user.check_password(password):
-                token = generate_token(str(user._id))
+                token = generate_token(str(user._id), user.author_name)
                 return token, True
         return 'Invalid credentials', False
     except Exception as e:
