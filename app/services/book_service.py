@@ -44,4 +44,16 @@ def update_book_entry(user_id, title, new_title, new_author_name, new_genre, new
     except Exception as e:
         logger.error(f"Error in update_book_entry: {e}")
         return False, 'An error occurred during the update'    
+    
+def delete_book_entry(user_id, title):
+    try:
+        book = Book.find_by_user_id_and_title(user_id, title)
+        if not book:
+            return False, 'Book not found'
+
+        Book.delete_book(book['_id'])
+        return True, 'Book entry deleted successfully'
+    except Exception as e:
+        logger.error(f"Error in delete_book_entry: {e}")
+        return False, 'An error occurred while deleting the book entry'    
    
