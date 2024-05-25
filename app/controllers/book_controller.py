@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.services.book_service import create_book_entry, get_books_by_user, update_book_entry
+from app.services.book_service import create_book_entry, get_books_by_user, update_book_entry, delete_book_entry
 from app.middleware.jwt_middleware import token_required
 
 book_blueprint = Blueprint('books', __name__)
@@ -78,4 +78,24 @@ def update_book():
             return jsonify({'message': message}), 400
     except Exception as e:
         print("Error in update_book:", str(e))
+        return jsonify({'message': 'Internal Server Error'}), 500    
+    
+@book_blueprint.route('/delete', methods=['DELETE'])  # DELETE
+@token_required
+def delete_book():
+    try:
+        data = request.json
+        if not data or not 'title' in data:
+            return jsonify({'message': 'Title is required'}), 400
+
+        user_id = request.user_id
+        title = data['title']
+
+        success, message = delete_book_entry(user_id, title)
+        if success:
+            return jsonify({'message': message}), 200
+        else:
+            return jsonify({'message': message}), 400
+    except Exception as e:
+        print("Error in delete_book:", str(e))
         return jsonify({'message': 'Internal Server Error'}), 500    
