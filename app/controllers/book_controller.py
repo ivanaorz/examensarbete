@@ -1,10 +1,10 @@
 from flask import Blueprint, request, jsonify
-from app.services.book_service import create_book_entry, get_books_by_user, update_book_entry, delete_book_entry
+from app.services.book_service import create_book_entry, get_books_by_user, update_book_entry, delete_book_entry, get_authors_with_books
 from app.middleware.jwt_middleware import token_required
 
 book_blueprint = Blueprint('books', __name__)
    
-@book_blueprint.route('/create', methods=['POST']) #CREATE
+@book_blueprint.route('/create', methods=['POST']) #CREATE BOOK ENTRY
 @token_required
 def create_book():
     try:
@@ -35,7 +35,7 @@ def create_book():
         print("Error in create_book:", str(e))
         return jsonify({'message': 'Internal Server Error'}), 500
     
-@book_blueprint.route('/all', methods=['GET'])  # READ
+@book_blueprint.route('/all', methods=['GET'])  # READ ALL BOOK ENTRIES
 @token_required
 def get_books():
     try:
@@ -50,7 +50,7 @@ def get_books():
         print("Error in get_books:", str(e))
         return jsonify({'message': 'Internal Server Error'}), 500    
     
-@book_blueprint.route('/update', methods=['PUT'])  # UPDATE
+@book_blueprint.route('/update', methods=['PUT'])  # UPDATE BOOK ENTRY
 @token_required
 def update_book():
     try:
@@ -80,7 +80,7 @@ def update_book():
         print("Error in update_book:", str(e))
         return jsonify({'message': 'Internal Server Error'}), 500    
     
-@book_blueprint.route('/delete', methods=['DELETE'])  # DELETE
+@book_blueprint.route('/delete', methods=['DELETE'])  # DELETE BOOK ENTRY
 @token_required
 def delete_book():
     try:
@@ -98,4 +98,16 @@ def delete_book():
             return jsonify({'message': message}), 400
     except Exception as e:
         print("Error in delete_book:", str(e))
-        return jsonify({'message': 'Internal Server Error'}), 500    
+        return jsonify({'message': 'Internal Server Error'}), 500  
+
+@book_blueprint.route('/authors', methods=['GET'])  #READ ALL AUTHORS WITH BOOKS
+def get_authors():
+    try:
+        success, authors = get_authors_with_books()
+        if success:
+            return jsonify({'authors': sorted(authors)}), 200
+        else:
+            return jsonify({'message': 'An error occurred while retrieving the list with self-published writers.'}), 500
+    except Exception as e:
+        print("Error in get_authors:", str(e))
+        return jsonify({'message': 'Internal Server Error'}), 500     
