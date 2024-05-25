@@ -27,3 +27,7 @@ class Book:
     @staticmethod
     def insert_book(book_data):
         return books_collection.insert_one(book_data)
+    
+    @staticmethod
+    def find_by_user_id(user_id):
+        return list(books_collection.find({'user_id': user_id}))
