@@ -63,5 +63,13 @@ def get_authors_with_books():
         return True, authors
     except Exception as e:
         logger.error(f"Error in get_authors_with_books: {e}")
-        return False, 'An error occurred retrieving authors with books'    
+        return False, 'An error occurred retrieving authors with books' 
+
+def get_books_by_author_name(author_name):
+    try:
+        books = Book.find_by_author_name(author_name)
+        return True, books
+    except Exception as e:
+        logger.error(f"Error in get_books_by_author_name: {e}")
+        return False, 'An error occurred retrieving books for the author'       
    
