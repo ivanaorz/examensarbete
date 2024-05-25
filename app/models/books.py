@@ -43,4 +43,14 @@ class Book:
 
     @staticmethod #DELETE
     def delete_book(book_id):
-        books_collection.delete_one({'_id': book_id})    
+        books_collection.delete_one({'_id': book_id})  
+
+    @staticmethod #READ ALL AUTHORS
+    def find_authors_with_books():
+        pipeline = [
+            {"$group": {"_id": "$author_name", "count": {"$sum": 1}}},
+            {"$match": {"count": {"$gt": 0}}},
+            {"$sort": {"_id": 1}}
+        ]
+        result = books_collection.aggregate(pipeline)
+        return [doc["_id"] for doc in result]      
