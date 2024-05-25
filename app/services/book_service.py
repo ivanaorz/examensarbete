@@ -26,3 +26,4 @@ def get_books_by_user(user_id):
     except Exception as e:
         logger.error(f"Error in get_books_by_user: {e}")
         return False, 'An error occurred displaying book entries'
+   
