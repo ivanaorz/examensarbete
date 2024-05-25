@@ -53,4 +53,9 @@ class Book:
             {"$sort": {"_id": 1}}
         ]
         result = books_collection.aggregate(pipeline)
-        return [doc["_id"] for doc in result]      
+        return [doc["_id"] for doc in result]     
+
+    @staticmethod
+    def find_by_author_name(author_name):
+        books = books_collection.find({'author_name': author_name})
+        return [Book(**book).to_dict() for book in books] 
