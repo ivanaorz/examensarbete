@@ -32,3 +32,7 @@ class Book:
     def find_by_user_id(user_id):
         books = books_collection.find({'user_id': user_id})
         return [Book(**book).to_dict() for book in books]
+    
+    @staticmethod
+    def find_by_user_id_and_title(user_id, title):
+        return books_collection.find_one({'user_id': user_id, 'title': title})
