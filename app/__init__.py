@@ -15,4 +15,10 @@ mongo = PyMongo(app)
 
 
 from app.controllers.authentication_controller import auth_blueprint
+from app.controllers.book_controller import book_blueprint  
 app.register_blueprint(auth_blueprint, url_prefix='/auth')
+app.register_blueprint(book_blueprint, url_prefix='/books')
+
+
+
+

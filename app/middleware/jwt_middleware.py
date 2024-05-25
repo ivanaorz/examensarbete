@@ -7,16 +7,20 @@ def token_required(f):
     def decorated(*args, **kwargs):
         token = None
         if 'Authorization' in request.headers:
-            token = request.headers['Authorization'].split(" ")[1]
-        if not token:
-            return jsonify({'message': 'Token is missing!'}), 403
+            auth_header = request.headers['Authorization']
+            if auth_header.startswith('Bearer '):
+                token = auth_header.split(" ")[1]
+            else:
+                return jsonify({'message': 'Invalid authorization header'}), 403
+        else:
+            return jsonify({'message': 'Authorization header is missing'}), 403
+
+        decoded_token = decode_token(token)
+        if isinstance(decoded_token, str):
+            return jsonify({'message': decoded_token}), 403
         
-        user_id = decode_token(token)
-        if isinstance(user_id, str):
-            return jsonify({'message': user_id}), 403
-        
-        request.user_id = user_id
+        request.user_id = decoded_token['sub']
+        request.user_author_name = decoded_token.get('author_name', '')
+
         return f(*args, **kwargs)
     return decorated
-
-
