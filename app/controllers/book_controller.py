@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.services.book_service import create_book_entry, get_books_by_user
+from app.services.book_service import create_book_entry, get_books_by_user, update_book_entry
 from app.middleware.jwt_middleware import token_required
 
 book_blueprint = Blueprint('books', __name__)
@@ -48,4 +48,34 @@ def get_books():
             return jsonify({'message': result}), 500
     except Exception as e:
         print("Error in get_books:", str(e))
+        return jsonify({'message': 'Internal Server Error'}), 500    
+    
+@book_blueprint.route('/update', methods=['PUT'])  # UPDATE
+@token_required
+def update_book():
+    try:
+        data = request.json
+        if not data or not all(key in data for key in ('title', 'new_title', 'new_author_name', 'new_genre', 'new_year')):
+            return jsonify({'message': 'All fields are required'}), 400
+
+        if data['new_author_name'] != request.user_author_name:
+            return jsonify({'message': 'Author name from token does not match the new author name in request'}), 403
+
+        user_id = request.user_id
+        title = data['title']
+        new_title = data['new_title']
+        new_author_name = data['new_author_name']
+        new_genre = data['new_genre']
+        new_year = data['new_year']
+
+        if not isinstance(new_year, int):
+            return jsonify({'message': 'Year must be an integer'}), 400
+
+        success, message = update_book_entry(user_id, title, new_title, new_author_name, new_genre, new_year)
+        if success:
+            return jsonify({'message': message}), 200
+        else:
+            return jsonify({'message': message}), 400
+    except Exception as e:
+        print("Error in update_book:", str(e))
         return jsonify({'message': 'Internal Server Error'}), 500    
