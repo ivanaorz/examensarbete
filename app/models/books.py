@@ -40,3 +40,7 @@ class Book:
     @staticmethod #UPDATE
     def update_book(book_id, updated_data):
         books_collection.update_one({'_id': book_id}, {'$set': updated_data})
+
+    @staticmethod #DELETE
+    def delete_book(book_id):
+        books_collection.delete_one({'_id': book_id})    
