@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.services.book_service import create_book_entry, get_books_by_user, update_book_entry, delete_book_entry, get_authors_with_books
+from app.services.book_service import create_book_entry, get_books_by_user, update_book_entry, delete_book_entry, get_authors_with_books, get_books_by_author_name
 from app.middleware.jwt_middleware import token_required
 
 book_blueprint = Blueprint('books', __name__)
@@ -110,4 +110,18 @@ def get_authors():
             return jsonify({'message': 'An error occurred while retrieving the list with self-published writers.'}), 500
     except Exception as e:
         print("Error in get_authors:", str(e))
+        return jsonify({'message': 'Internal Server Error'}), 500    
+
+@book_blueprint.route('/author/<author_name>', methods=['GET'])  #READ ALL BOOKS OF A PARTICULAR AUTHOR
+def get_books_by_author(author_name):
+    try:
+        success, books = get_books_by_author_name(author_name)
+        if success:
+            if not books:
+                return jsonify({'message': f'No books found for author: {author_name}'}), 200
+            return jsonify({'books': books}), 200
+        else:
+            return jsonify({'message': 'An error occurred while retrieving books for the author.'}), 500
+    except Exception as e:
+        print("Error in get_books_by_author:", str(e))
         return jsonify({'message': 'Internal Server Error'}), 500     
