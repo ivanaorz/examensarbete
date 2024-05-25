@@ -24,19 +24,19 @@ class Book:
             'year': self.year
         }
 
-    @staticmethod
+    @staticmethod #CREATE
     def insert_book(book_data):
         return books_collection.insert_one(book_data)
     
-    @staticmethod
+    @staticmethod #READ
     def find_by_user_id(user_id):
         books = books_collection.find({'user_id': user_id})
         return [Book(**book).to_dict() for book in books]
     
-    @staticmethod
+    @staticmethod #UPDATE
     def find_by_user_id_and_title(user_id, title):
         return books_collection.find_one({'user_id': user_id, 'title': title})
     
-    @staticmethod
+    @staticmethod #UPDATE
     def update_book(book_id, updated_data):
         books_collection.update_one({'_id': book_id}, {'$set': updated_data})

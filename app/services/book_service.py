@@ -40,7 +40,7 @@ def update_book_entry(user_id, title, new_title, new_author_name, new_genre, new
             'year': new_year
         }
         Book.update_book(book['_id'], updated_data)
-        return True, 'Book entry updated successfully'
+        return True, 'Book entry updated successfully, congratulations'
     except Exception as e:
         logger.error(f"Error in update_book_entry: {e}")
         return False, 'An error occurred during the update'    
