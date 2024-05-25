@@ -18,3 +18,12 @@ def create_book_entry(user_id, title, author_name, genre, year):
     except Exception as e:
         logger.error(f"Error in create_book_entry: {e}")
         return False, 'An error occurred creating the book entry'
+
+def get_books_by_user(user_id):
+    try:
+        books = Book.find_by_user_id(user_id)
+        return True, books
+    except Exception as e:
+        logger.error(f"Error in get_books_by_user: {e}")
+        return False, 'An error occurred displaying book entries'
+   

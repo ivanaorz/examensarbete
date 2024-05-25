@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.services.book_service import create_book_entry
+from app.services.book_service import create_book_entry, get_books_by_user
 from app.middleware.jwt_middleware import token_required
 
 book_blueprint = Blueprint('books', __name__)
@@ -34,3 +34,18 @@ def create_book():
     except Exception as e:
         print("Error in create_book:", str(e))
         return jsonify({'message': 'Internal Server Error'}), 500
+    
+@book_blueprint.route('/all', methods=['GET'])  # READ
+@token_required
+def get_books():
+    try:
+        success, result = get_books_by_user(request.user_id)
+        if success:
+            if not result:
+                return jsonify({'message': 'There are no book entries yet.'}), 200
+            return jsonify({'books': result}), 200
+        else:
+            return jsonify({'message': result}), 500
+    except Exception as e:
+        print("Error in get_books:", str(e))
+        return jsonify({'message': 'Internal Server Error'}), 500    

@@ -16,8 +16,8 @@ class Book:
 
     def to_dict(self):
         return {
-            '_id': self._id,
-            'user_id': self.user_id,
+            '_id': str(self._id),
+            'user_id': str(self.user_id),
             'title': self.title,
             'author_name': self.author_name,
             'genre': self.genre,
@@ -27,3 +27,8 @@ class Book:
     @staticmethod
     def insert_book(book_data):
         return books_collection.insert_one(book_data)
+    
+    @staticmethod
+    def find_by_user_id(user_id):
+        books = books_collection.find({'user_id': user_id})
+        return [Book(**book).to_dict() for book in books]
