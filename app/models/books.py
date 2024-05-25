@@ -36,3 +36,7 @@ class Book:
     @staticmethod
     def find_by_user_id_and_title(user_id, title):
         return books_collection.find_one({'user_id': user_id, 'title': title})
+    
+    @staticmethod
+    def update_book(book_id, updated_data):
+        books_collection.update_one({'_id': book_id}, {'$set': updated_data})
