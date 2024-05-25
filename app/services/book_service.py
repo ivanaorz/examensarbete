@@ -56,4 +56,12 @@ def delete_book_entry(user_id, title):
     except Exception as e:
         logger.error(f"Error in delete_book_entry: {e}")
         return False, 'An error occurred while deleting the book entry'    
+    
+def get_authors_with_books():
+    try:
+        authors = Book.find_authors_with_books()
+        return True, authors
+    except Exception as e:
+        logger.error(f"Error in get_authors_with_books: {e}")
+        return False, 'An error occurred retrieving authors with books'    
    
