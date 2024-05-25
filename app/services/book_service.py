@@ -26,4 +26,22 @@ def get_books_by_user(user_id):
     except Exception as e:
         logger.error(f"Error in get_books_by_user: {e}")
         return False, 'An error occurred displaying book entries'
+    
+def update_book_entry(user_id, title, new_title, new_author_name, new_genre, new_year):
+    try:
+        book = Book.find_by_user_id_and_title(user_id, title)
+        if not book:
+            return False, 'Book not found'
+
+        updated_data = {
+            'title': new_title,
+            'author_name': new_author_name,
+            'genre': new_genre,
+            'year': new_year
+        }
+        Book.update_book(book['_id'], updated_data)
+        return True, 'Book entry updated successfully'
+    except Exception as e:
+        logger.error(f"Error in update_book_entry: {e}")
+        return False, 'An error occurred during the update'    
    
