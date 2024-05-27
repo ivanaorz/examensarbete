@@ -1,6 +1,8 @@
+
 from flask import request, jsonify
 from functools import wraps
 from app.utils.jwt_util import decode_token
+from app.models.tokenblacklist import BlacklistToken
 
 def token_required(f):
     @wraps(f)
@@ -14,6 +16,9 @@ def token_required(f):
                 return jsonify({'message': 'Invalid authorization header'}), 403
         else:
             return jsonify({'message': 'Authorization header is missing'}), 403
+        
+        if BlacklistToken.is_token_blacklisted(token):
+            return jsonify({'message': 'Token has been blacklisted!'}), 403
 
         decoded_token = decode_token(token)
         if isinstance(decoded_token, str):
@@ -24,3 +29,12 @@ def token_required(f):
 
         return f(*args, **kwargs)
     return decorated
+
+
+
+
+
+
+
+
+
