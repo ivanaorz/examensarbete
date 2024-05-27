@@ -20,3 +20,4 @@ def decode_token(token):
     except jwt.InvalidTokenError:
         return 'Invalid token. Please log in again.'
 
+

@@ -1,4 +1,5 @@
 from app.models.users import User
+from app.models.tokenblacklist import BlacklistToken
 from app.utils.jwt_util import generate_token
 import logging
 
@@ -36,3 +37,11 @@ def login_user(email, password):
     except Exception as e:
         logger.error(f"Error in login_user: {e}")
         return 'Internal Server Error', False    
+
+
+def logout_user(token):
+    try:
+        BlacklistToken.add_token_to_blacklist(token)
+    except Exception as e:
+        logger.error(f"Error in logout_user: {e}")
+        raise Exception('An error occurred during logout')
