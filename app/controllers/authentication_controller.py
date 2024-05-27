@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.services.authentication_service import register_user, login_user
+from app.services.authentication_service import register_user, login_user, logout_user
 from app.middleware.jwt_middleware import token_required
 
 auth_blueprint = Blueprint('auth', __name__)
@@ -36,6 +36,17 @@ def login():
 @token_required
 def protected():
     return jsonify({'message': 'This is a protected route.', 'user_id': request.user_id}), 200
+
+@auth_blueprint.route('/logout', methods=['POST'])
+@token_required
+def logout():
+    try:
+        token = request.headers.get('Authorization').split()[1]
+        logout_user(token)
+        return jsonify({'message': 'Successfully logged out'}), 200
+    except Exception as e:
+        print("Error in logout:", str(e))
+        return jsonify({'message': 'Internal Server Error'}), 500
 
 
 

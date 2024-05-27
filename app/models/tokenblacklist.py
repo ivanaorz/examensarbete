@@ -15,3 +15,5 @@ class BlacklistToken:
     @staticmethod
     def is_token_blacklisted(token):
         return blacklist_collection.find_one({'token': token}) is not None
+    
+
