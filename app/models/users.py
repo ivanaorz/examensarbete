@@ -33,7 +33,7 @@ class User:
             'email': self.email,
             'password_hash': self.password_hash,
             'role': self.role,
-            'author_name': self.author_name
+            'authorName': self.author_name
         }
 
     @staticmethod

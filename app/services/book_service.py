@@ -35,7 +35,7 @@ def update_book_entry(user_id, title, new_title, new_author_name, new_genre, new
 
         updated_data = {
             'title': new_title,
-            'author_name': new_author_name,
+            'authorName': new_author_name,
             'genre': new_genre,
             'year': new_year
         }
