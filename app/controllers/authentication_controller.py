@@ -9,7 +9,7 @@ def register():
     try:
         data = request.json
         print("Received data:", data)
-        message, success = register_user(data['username'], data['email'], data['password'], data.get('authorName', None))
+        message, success = register_user(data['username'], data['email'], data['password'], data.get('author_name', None))
         if success:
             return jsonify({'message': message}), 201
         else:

@@ -28,7 +28,7 @@ def login_user(email, password):
                 password_hash=user_data.get('password_hash'),  
                 role=user_data.get('role'),
                 _id=user_data.get('_id'),
-                author_name=user_data.get('authorName')
+                author_name=user_data.get('author_name')
             )
             if user.check_password(password):
                 token = generate_token(str(user._id), user.author_name)
